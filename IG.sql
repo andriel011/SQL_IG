@@ -1,65 +1,92 @@
-CREATE TABLE `account_types` (
-  `AccountTypeID` int NOT NULL AUTO_INCREMENT,
-  `TypeName` varchar(50) NOT NULL,
-  PRIMARY KEY (`AccountTypeID`)
-); 
-CREATE TABLE `comments` (
-  `CommentID` int NOT NULL AUTO_INCREMENT,
-  `UserID` int NOT NULL,
-  `PostID` int NOT NULL,
-  `CommentText` text NOT NULL,
-  `CreatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`CommentID`),
-  KEY `UserID` (`UserID`),
-  KEY `PostID` (`PostID`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
-  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`PostID`) REFERENCES `posts` (`PostID`)
-) ;
-CREATE TABLE `follows` (
-  `FollowerID` int NOT NULL,
-  `FollowingID` int NOT NULL,
-  `FollowDate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`FollowerID`,`FollowingID`),
-  KEY `FollowingID` (`FollowingID`),
-  CONSTRAINT `follows_ibfk_1` FOREIGN KEY (`FollowerID`) REFERENCES `users` (`UserID`),
-  CONSTRAINT `follows_ibfk_2` FOREIGN KEY (`FollowingID`) REFERENCES `users` (`UserID`)
+CREATE DATABASE IF NOT EXISTS InstagramDB;
+
+USE InstagramDB;
+
+
+CREATE TABLE Account_Types (
+    AccountTypeID INT AUTO_INCREMENT PRIMARY KEY,
+    TypeName VARCHAR(50) NOT NULL
 );
-CREATE TABLE `likes` (
-  `LikeID` int NOT NULL AUTO_INCREMENT,
-  `UserID` int NOT NULL,
-  `PostID` int NOT NULL,
-  `CreatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`LikeID`),
-  KEY `UserID` (`UserID`),
-  KEY `PostID` (`PostID`),
-  CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
-  CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`PostID`) REFERENCES `posts` (`PostID`)
+
+
+CREATE TABLE Categories (
+    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(50) NOT NULL
 );
-CREATE TABLE `posts` (
-  `PostID` int NOT NULL AUTO_INCREMENT,
-  `UserID` int NOT NULL,
-  `CategoryID` int DEFAULT NULL,
-  `Caption` text,
-  `CreatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`PostID`),
-  KEY `UserID` (`UserID`),
-  KEY `CategoryID` (`CategoryID`),
-  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
-  CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`)
-); 
-CREATE TABLE `users` (
-  `UserID` int NOT NULL AUTO_INCREMENT,
-  `Username` varchar(50) NOT NULL,
-  `Email` varchar(100) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Bio` text,
-  `AccountTypeID` int DEFAULT NULL,
-  PRIMARY KEY (`UserID`),
-  KEY `AccountTypeID` (`AccountTypeID`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`AccountTypeID`) REFERENCES `account_types` (`AccountTypeID`)
+
+
+CREATE TABLE Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Bio TEXT,
+    AccountTypeID INT,
+    FOREIGN KEY (AccountTypeID)
+        REFERENCES Account_Types(AccountTypeID)
 );
-CREATE TABLE `categories` (
-  `CategoryID` int NOT NULL AUTO_INCREMENT,
-  `CategoryName` varchar(50) NOT NULL,
-  PRIMARY KEY (`CategoryID`)
-) 
+
+
+CREATE TABLE Posts (
+    PostID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    CategoryID INT,
+    Caption TEXT,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (UserID)
+        REFERENCES Users(UserID),
+
+    FOREIGN KEY (CategoryID)
+        REFERENCES Categories(CategoryID)
+);
+
+
+CREATE TABLE Likes (
+    LikeID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    PostID INT NOT NULL,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (UserID)
+        REFERENCES Users(UserID),
+
+    FOREIGN KEY (PostID)
+        REFERENCES Posts(PostID)
+);
+
+CREATE TABLE Comments (
+    CommentID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    PostID INT NOT NULL,
+    CommentText TEXT NOT NULL,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (UserID)
+        REFERENCES Users(UserID),
+
+    FOREIGN KEY (PostID)
+        REFERENCES Posts(PostID)
+);
+
+
+CREATE TABLE Follows (
+    FollowerID INT NOT NULL,
+    FollowingID INT NOT NULL,
+    FollowDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (FollowerID, FollowingID),
+
+    FOREIGN KEY (FollowerID)
+        REFERENCES Users(UserID),
+
+    FOREIGN KEY (FollowingID)
+        REFERENCES Users(UserID)
+);
+
+
+CREATE INDEX idx_post_user
+ON Posts(UserID);
+
+CREATE INDEX idx_like_post
+ON Likes(PostID);
