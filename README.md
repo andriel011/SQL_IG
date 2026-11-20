@@ -1,8 +1,8 @@
-# InstagramDB
+# InstagramDB - Social Media Database Simulation
 
 ## Project Description
 
-InstagramDB is a relational database project developed in MySQL that simulates the core functionality of a social media platform similar to Instagram.
+InstagramDB is a relational database project developed using MySQL that simulates the core functionality of a social media platform similar to Instagram.
 
 The database allows users to:
 
@@ -12,6 +12,7 @@ The database allows users to:
 - Comment on posts
 - Follow other users
 - Categorize content
+- Generate reports through SQL queries
 
 ---
 
@@ -29,39 +30,100 @@ The database allows users to:
 
 ### Views
 
- vw_MainFeed
-vw_UserFollowers
+1. vw_MainFeed
+   - Displays posts with author information, likes, and comments.
+
+2. vw_UserFollowers
+   - Shows the total number of followers for each user.
+
+3. vw_UserActivity
+   - Displays user activity statistics including posts, likes received, and followers.
 
 ### Stored Procedures
 
-GetPostsByUser
+1. GetPostsByUser
+   - Returns all posts created by a specific user.
 
 ### Triggers
 
-trg_NoSelfFollow
+1. trg_NoSelfFollow
+   - Prevents users from following themselves.
 
 ### Indexes
 
- idx_post_user
- idx_like_post
+1. idx_post_user
+2. idx_like_post
 
 ---
 
-## Installation
+## Project Structure
 
-1. Run IG.sql
-2. Run seed.sql
-3. Run view.sql
-4. Run procedures.sql
-5. Run triggers.sql
-6. Run Query.sql
+### IG.sql
+Contains the database schema and table creation scripts.
+
+### seed.sql
+Contains sample data used to test and populate the database.
+
+### view.sql
+Contains all database views used for reporting and data visualization.
+
+### procedures.sql
+Contains stored procedures used to automate common queries.
+
+### triggers.sql
+Contains triggers used to enforce business rules.
+
+### Query.sql
+Contains analytical and reporting queries.
 
 ---
 
-## Author
+## Sample Reports
 
-Andriel
-Monce
-Ashica
-Rinzin
-Shree
+The project includes analytical queries such as:
+
+- Total posts per user.
+- Followers count.
+- User comment activity.
+- Most liked posts.
+- Posts by category.
+- Users and account types.
+- Post author information.
+- Follower-following relationships.
+- Average likes per post.
+- Top active users.
+
+---
+
+## Technologies Used
+
+- MySQL
+- SQL
+- Relational Database Design
+
+---
+
+## Learning Objectives
+
+This project demonstrates:
+
+- Database Normalization
+- Primary Keys and Foreign Keys
+- One-to-Many Relationships
+- Many-to-Many Relationships
+- SQL Views
+- Stored Procedures
+- Triggers
+- Aggregate Functions
+- SQL Joins
+- Query Optimization Using Indexes
+
+---
+
+## Project Team
+
+- Andriel
+- Monce
+- Ashica
+- Rinzin
+- Shree
